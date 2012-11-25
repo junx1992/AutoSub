@@ -221,7 +221,7 @@ class MyFrame(wx.Frame):
 
                 # Set the Fast Key
                 acceltbl=wx.AcceleratorTable([(wx.ACCEL_CTRL,ord('O'),1),(wx.ACCEL_CTRL,ord('C'),2),(wx.ACCEL_CTRL,ord('P'),3),(wx.ACCEL_CTRL,ord('A'),4),(wx.ACCEL_CTRL,ord('S'),5),(wx.ACCEL_CTRL,ord('F'),6),(wx.ACCEL_CTRL,ord('V'),7)])
-                self.SetAcceleratorTable(acceltbl)
+                self.SetAcceleratorTable(acceltbl)                
                 
         def SetTheSpec(self,evt):
                 return 
@@ -271,7 +271,7 @@ class MyFrame(wx.Frame):
                         self.select_dialog.ShowModal()
                         # Finally Play~FIXME: this should be made cross-platform
                         self.OnPlay(None)
-                        self.Spec.GetAddr(self.Spec,self.mediapath)
+                        self.Spec.GetAddr(self.Spec,self.mediapath)                        
                 else:
                         dlg.Destroy()
 

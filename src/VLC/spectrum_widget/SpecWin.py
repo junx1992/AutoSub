@@ -190,8 +190,8 @@ class SpecPanel(wx.Panel):
         self.SetMinSize((500,200))
         #self.Fit()
 
-    def OpenData(self,event):
-        file_wildcard = "All files(*.*)|*.*"
+    def OpenData(self,event, handle):
+        """file_wildcard = "All files(*.*)|*.*"
         dlg = wx.FileDialog(self, "Open file...",
             os.getcwd(),
             style = wx.OPEN,
@@ -203,8 +203,9 @@ class SpecPanel(wx.Panel):
         handle = spec.ostream.get_handle()
 
         dec.start()
-        spec.start()
-        Num = 0
+        spec.start()"""
+        self.handle = handle
+        """Num = 0
 
         while handle.more_data():
             iter = 0
@@ -232,14 +233,41 @@ class SpecPanel(wx.Panel):
                 specW = np.append(specW, vector, axis = 1)
                 list.append(vector)
             Num = Num + 1
-        return specW
+        return specW"""
 
     def GetAddr(self, event, path):
         self.addr = path
     
     def GetData(self,event):
+        Num = 0
 
-        self.specW = self.OpenData(self)
+        while self.handle.more_data():
+            iter = 0
+            q = []
+            pos, n, q = self.handle.read(1000, q)
+            for p in q:
+                if iter == 0:
+                    temp = p.T[::-1]
+                    vector = np.log(temp + 1)
+                else:
+                    temp = p.T[::-1]
+                    vector = np.append(vector, np.log(temp + 1), axis =1)
+                iter = iter +1
+                #plt.imshow(np.log(p.T+1))
+                #plt.show()
+            vector = vector/np.amax(vector)
+            vector = [vector, vector, vector]
+            vector = np.dstack(vector)
+            #plt.imsave(path, vector, cmap = cm.gray)
+            im = wx.ImageFromBuffer(int(np.size(vector, axis = 1)), int(np.size(vector, axis = 0)), np.uint8(vector))
+            if Num == 0:
+                self.specW = vector
+                list = [vector]
+            else:
+                self.specW = np.append(self.specW, vector, axis = 1)
+                list.append(vector)
+            Num = Num + 1
+
         self.spec = self.specW*255.0
             
         self.orim = wx.ImageFromBuffer(int(np.size(self.spec , axis = 1)), int(np.size(self.spec, axis = 0)), np.uint8(self.spec))

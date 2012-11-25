@@ -1,5 +1,6 @@
 import core.ffmpeg_decoder as fd
 import core.sub_generator as sg
+import core.spectrum as sp
 from core.naive_vad2 import *
 import VLC.vlc_wx as vlc_wx
 import sys
@@ -41,10 +42,17 @@ class MainFrame(vlc_wx.MyFrame):
         dec = fd.ffmpeg_decoder(source)
         vad = naive_vad(dec.ostream.get_handle())
         sub = sg.sub_generator(vad.ostream.get_handle(), source, target, lang_from = lang_from, lang_to = lang_to)
+        
         self.ohandle = sub.ostream.get_handle()
+        spec = sp.spectrum(dec.ostream.get_handle(), window_size = 1024)
+        handle = spec.ostream.get_handle()
+        #self.Spec.OpenData(self.Spec,self.ohandle)
         dec.start()
         vad.start()
         sub.start()
+        spec.start()
+        self.Spec.OpenData(self.Spec,handle)
+        
 
     # float second to time string 
     def OnFormatTime(self,floattime):
@@ -83,6 +91,8 @@ class MainFrame(vlc_wx.MyFrame):
             self.buffergauge.SetValue(self.end*self.buffergauge.GetRange()*1000/self.player.get_length())        
         # Link with subtitle
         #self.subpanel.OpenFile(self.subtitle)
+
+    
 
  
         
