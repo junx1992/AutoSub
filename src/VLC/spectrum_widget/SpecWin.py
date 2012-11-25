@@ -2,8 +2,6 @@
 import wx
 from pylab import *
 
-import core.ffmpeg_decoder as fd
-import core.spectrum as sp
 import matplotlib.pyplot as plt
 import numpy as np
 import os
@@ -149,7 +147,7 @@ class SpecPanel(wx.Panel):
         #ADD TWO BUTTONS TO MANIPULATE THE LEFT AND RIGHT BORDER
         self.button1 = wx.Button(self.panel, id=1, label='left', pos = (115,5), size = (30,25))
         self.button2 = wx.Button(self.panel, id=2, label='right', pos=(150,5), size = (30,25))
-        self.button3 = wx.Button(self.panel, id=3, label='open', pos=(80,5), size = (30,25))
+        self.button3 = wx.Button(self.panel, id=3, label='Start', pos=(80,5), size = (30,25))
         self.button1.Bind(wx.EVT_BUTTON, self.LeftButton)
         self.button2.Bind(wx.EVT_BUTTON, self.RightButton)
         self.button1.Bind(wx.EVT_BUTTON, self.LeftText)
