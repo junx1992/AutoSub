@@ -169,6 +169,8 @@ class SpecPanel(wx.Panel):
         self.wind.Bind(wx.EVT_LEFT_UP, self.LeftText)
         self.wind.Bind(wx.EVT_RIGHT_UP, self.RightText)
         self.wind.Bind(wx.EVT_SCROLLWIN, self.MidText)
+        self.wind.Bind(wx.EVT_LEFT_UP, self.MidText)
+        self.wind.Bind(wx.EVT_RIGHT_UP, self.MidText)
         self.sld1.Bind(wx.EVT_SLIDER, self.sliderUpdate2)
         #self.wind.Bind(wx.EVT_TIMER, self.CurrText, self.wind.timer)
         self.wind.FitInside()
