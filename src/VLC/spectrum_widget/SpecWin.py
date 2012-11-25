@@ -25,8 +25,6 @@ class ImageWindow(wx.ScrolledWindow):
         #ADD MOUSE DRAG EVENT TO REPLACE SCROLLING
         self.Bind(wx.EVT_LEFT_UP, self.OnLeftUp)
         self.Bind(wx.EVT_RIGHT_UP, self.OnRightUp)
-        self.timer = wx.Timer(self)
-        self.timer.Start(100)
         self.overlay=wx.Overlay()
         #ruler=RC.RulerCtrl(self, -1, pos=(0, np.size(specW, axis=0)), size=(np.size(specW , axis = 1),1),orient=wx.HORIZONTAL, style=wx.NO_BORDER)
         #ruler.SetFlip(flip=True)
@@ -163,7 +161,6 @@ class SpecPanel(wx.Panel):
 
 
         self.wind = ImageWindow(self)
-        self.wind.timer.Start(100)
         self.wind.SetBitmap(self.im.ConvertToBitmap())
         self.wind.SetScrollbars(1,0, self.im.GetWidth(), 200)
         wx.EVT_SLIDER(self.sld, self.sld.GetId(),self.sliderUpdate1)
@@ -174,7 +171,6 @@ class SpecPanel(wx.Panel):
         self.wind.Bind(wx.EVT_SCROLLWIN, self.MidText)
         self.sld1.Bind(wx.EVT_SLIDER, self.sliderUpdate2)
         #self.wind.Bind(wx.EVT_TIMER, self.CurrText, self.wind.timer)
-        self.wind.Bind(wx.EVT_TIMER, self.OnTimer, self.wind.timer)
         self.wind.FitInside()
         #self.wind.SetScrollbars(1,0, self.im.GetWidth(), 200)
 
@@ -367,12 +363,9 @@ class SpecPanel(wx.Panel):
         self.textcurr.Clear()
         time = milisec
         self.textcurr.WriteText(str(int(time/1000/60/60)) +":" +str(int(time/1000/60%60)) + ":" +str(int(time/1000%60)) +":" +str(int(time%1000)))
+        self.wind.CurrPos = time * 1000*self.ratio
         
 
-    def OnTimer(self, event):
-        self.wind.CurrPos = self.wind.CurrPos + 1.5
-        self.Refresh()
-        event.Skip()
 
 if __name__=='__main__':
         app = wx.PySimpleApp()
