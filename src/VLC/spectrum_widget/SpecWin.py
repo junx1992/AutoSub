@@ -351,6 +351,7 @@ class SpecPanel(wx.Panel):
         time = (-self.wind.CalcScrolledPosition(0,0)[0] + 150)/self.ratio*200.0/self.pos
         self.textmid.WriteText(str(int(time/60/60))+":"+str(int(time/60%60))+":"+str(int(time%60))+ ":"+str(int(((round(time, 2) - int(time))*100))))
         self.currx = -self.wind.CalcScrolledPosition(0,0)[0]
+        self.wind.Refresh()
         event.Skip()
 
     """def CurrText(self, event):
