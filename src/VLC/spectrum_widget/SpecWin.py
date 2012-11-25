@@ -327,6 +327,8 @@ class SpecPanel(wx.Panel):
         self.textleft.Clear()
         if self.wind.LeftClickFlag ==1:
             time = self.wind.LeX/self.ratio/self.pos*200
+            lefttext=str(int(time/60/60))+":"+str(int(time/60%60))+":"+str(int(time%60)) + ":"+str(int(((round(time, 2) - int(time))*100)))
+            self.leftstr=lefttext
             self.textleft.WriteText(str(int(time/60/60))+":"+str(int(time/60%60))+":"+str(int(time%60)) + ":"+str(int(((round(time, 2) - int(time))*100))))
         event.Skip()
 
@@ -334,9 +336,20 @@ class SpecPanel(wx.Panel):
         self.textright.Clear()
         if self.wind.RightClickFlag==1:
             time = self.wind.RiX/self.ratio/self.pos*200
+            righttext=str(int(time/60/60))+":"+str(int(time/60%60))+":"+str(int(time%60)) + ":"+str(int(((round(time, 2) - int(time))*100)))
+            self.rightstr=righttext
             self.textright.WriteText(str(int(time/60/60))+":"+str(int(time/60%60))+":"+str(int(time%60)) + ":"+str(int(((round(time, 2) - int(time))*100))))
         event.Skip()
-
+    def GetLeft(self,event):
+        try:
+            return self.leftstr
+        except:
+            return "-1"
+    def GetRight(self,event):
+        try:
+            return self.rightstr
+        except:
+            return "-1"
     def MidText(self, event):
         self.textmid.Clear()
         time = (-self.wind.CalcScrolledPosition(0,0)[0] + 150)/self.ratio*200.0/self.pos

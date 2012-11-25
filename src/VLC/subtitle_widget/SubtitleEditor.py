@@ -371,6 +371,10 @@ class Subtitle(wx.Panel):
         dd=int(num)
 
         self.listBox.Delete(dd);
+    def SetLeft(self,event,lefttime):
+        self.begintime.SetValue(lefttime)
+    def SetRight(self,event,righttime):
+        self.endtime.SetValue(righttime)
     def AddSub(self,event,st,et,context):
         srt=' '+st+' -- '+et+' '+context;
         ad=srt.decode('utf-8','ignore');

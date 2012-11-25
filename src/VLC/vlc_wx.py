@@ -221,7 +221,7 @@ class MyFrame(wx.Frame):
 
                 # Set the Fast Key
                 acceltbl=wx.AcceleratorTable([(wx.ACCEL_CTRL,ord('O'),1),(wx.ACCEL_CTRL,ord('C'),2),(wx.ACCEL_CTRL,ord('P'),3),(wx.ACCEL_CTRL,ord('A'),4),(wx.ACCEL_CTRL,ord('S'),5),(wx.ACCEL_CTRL,ord('F'),6),(wx.ACCEL_CTRL,ord('V'),7)])
-                self.SetAcceleratorTable(acceltbl)                
+                self.SetAcceleratorTable(acceltbl)               
                 
         def SetTheSpec(self,evt):
                 return 
@@ -290,6 +290,7 @@ class MyFrame(wx.Frame):
                                 self.errorDialog("Unable to play.")
                         else:
                                 self.timer.Start(100)
+                                
 
         def OnPlayButton(self,evt):
                 if not self.player.get_media():
@@ -328,7 +329,7 @@ class MyFrame(wx.Frame):
                 self.length_min=length_second/60
                 self.length_sec=length_second-self.length_min*60
 
-                # update the time on the slider
+                # update the time on the slider                
                 time = self.player.get_time()
                 self.timeslider.SetValue(time)
 
@@ -361,6 +362,14 @@ class MyFrame(wx.Frame):
                         str_length_sec=str(self.length_sec)
                 self.displaytime.SetLabel(str_min+":"+str_sec+"/"+str_length_min+":"+str_length_sec)
 
+                #spectoright
+                ll=self.Spec.GetLeft(self.Spec)
+                
+                if(ll!="-1"):
+                        self.subpanel.SetLeft(self.subpanel,ll)
+                rr=self.Spec.GetRight(self.Spec)
+                if(rr!="-1"):
+                        self.subpanel.SetRight(self.subpanel,rr)
                 
 
         def OnToggleVolume(self, evt):

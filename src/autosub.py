@@ -39,7 +39,7 @@ class MainFrame(vlc_wx.MyFrame):
         
         self.currentfile=None
         
-        dec = fd.ffmpeg_decoder(source)
+        dec = fd.ffmpeg_decoder(source,output_rate = 8000)
         vad = naive_vad(dec.ostream.get_handle())
         sub = sg.sub_generator(vad.ostream.get_handle(), source, target, lang_from = lang_from, lang_to = lang_to)
         
@@ -79,14 +79,14 @@ class MainFrame(vlc_wx.MyFrame):
         return string_time
 
     def OnTimer(self,evt):
-        super(MainFrame, self).OnTimer(self)
+        super(MainFrame, self).OnTimer(self)        
         if self.ohandle.has_data(1):            
             (start,self.end,text)=self.ohandle.read(1)[2][0][0]            
             self.player.video_set_subtitle_file(self.subtitle)
             str_start=self.OnFormatTime(start)
             str_end=self.OnFormatTime(self.end)
             self.subpanel.AddSub(self.subpanel,str_start,str_end,text)
-        # Set buffer time
+            # Set buffer time
         if self.player.get_length()!=0:
             self.buffergauge.SetValue(self.end*self.buffergauge.GetRange()*1000/self.player.get_length())        
         # Link with subtitle
