@@ -365,7 +365,6 @@ class SpecPanel(wx.Panel):
         time = milisec
         self.textcurr.WriteText(str(int(time/1000/60/60)) +":" +str(int(time/1000/60%60)) + ":" +str(int(time/1000%60)) +":" +str(int(time%1000)))
         self.wind.CurrPos = time/1000*self.ratio
-        print time/1000*self.ratio
         self.wind.Refresh()
         
 
