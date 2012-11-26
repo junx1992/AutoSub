@@ -111,7 +111,7 @@ class SimFrame(wx.Frame):
     def __init__(self):
         wx.Frame.__init__(self,None,-1,"Frame")
         self.panel=SpecPanel(self)
-        self.SetSize((500,200))
+        self.SetSize((550,200))
 
 
 class SpecPanel(wx.Panel):
@@ -129,10 +129,10 @@ class SpecPanel(wx.Panel):
 
         self.ratio = 15.69565217391304
 
-        self.sld = wx.Slider(self.panel, value = 200, minValue = 150, maxValue =500,pos = (0,20),
+        self.sld = wx.Slider(self.panel, value = 200, minValue = 150, maxValue =500,
             size=(55, 150), style=wx.SL_VERTICAL | wx.SL_AUTOTICKS | wx.SL_LABELS, name='width')
         self.sld.SetTickFreq(20, 1)
-        self.sld1 = wx.Slider(self.panel, value = 200, minValue = 150, maxValue =500,pos = (55,20),
+        self.sld1 = wx.Slider(self.panel, value = 200, minValue = 150, maxValue =500,
             size=(55, 150), style=wx.SL_VERTICAL| wx.SL_AUTOTICKS | wx.SL_LABELS)
         self.sld1.SetTickFreq(20, 1)
 
@@ -143,18 +143,18 @@ class SpecPanel(wx.Panel):
         self.SetAcceleratorTable(acceltbl)
 
         #ADD TWO BUTTONS TO MANIPULATE THE LEFT AND RIGHT BORDER
-        self.button1 = wx.Button(self.panel, id=1, label='left', pos = (115,5), size = (30,25))
-        self.button2 = wx.Button(self.panel, id=2, label='right', pos=(150,5), size = (30,25))
-        self.button3 = wx.Button(self.panel, id=3, label='Start', pos=(80,5), size = (30,25))
+        self.button1 = wx.Button(self.panel, id=1, label='left',  size = (30,25))
+        self.button2 = wx.Button(self.panel, id=2, label='right',  size = (30,25))
+        self.button3 = wx.Button(self.panel, id=3, label='Start', size = (30,25))
         self.button1.Bind(wx.EVT_BUTTON, self.LeftButton)
         self.button2.Bind(wx.EVT_BUTTON, self.RightButton)
         #self.button1.Bind(wx.EVT_BUTTON, self.LeftText)
         #self.button2.Bind(wx.EVT_BUTTON, self.RightText)
         self.button3.Bind(wx.EVT_BUTTON, self.GetData)
-        self.textleft = wx.TextCtrl(self.panel, id=3, pos=(115, 40), size=(70, 25))
-        self.textright = wx.TextCtrl(self.panel, id=4, pos=(115, 70), size=(70, 25))
-        self.textmid = wx.TextCtrl(self.panel, id=5, pos=(115, 100), size=(70,25))
-        self.textcurr = wx.TextCtrl(self.panel, id=6, pos=(115, 130), size=(70,25))
+        self.textleft = wx.TextCtrl(self.panel, id=3, size=(70, 25))
+        self.textright = wx.TextCtrl(self.panel, id=4,  size=(70, 25))
+        self.textmid = wx.TextCtrl(self.panel, id=5,  size=(70,25))
+        self.textcurr = wx.TextCtrl(self.panel, id=6,  size=(70,25))
             
         self.im = self.orim
         self.bm = self.im.ConvertToBitmap()
@@ -177,14 +177,24 @@ class SpecPanel(wx.Panel):
         #self.wind.SetScrollbars(1,0, self.im.GetWidth(), 200)
 
 
-        self.sizer = wx.BoxSizer (wx.HORIZONTAL)
-        self.sizer.Add(self.wind, 1,wx.ALIGN_CENTER,0)
-        self.wind.SetMinSize((300,150))
-        self.sizer.Add(self.panel, wx.ALIGN_LEFT)
-        self.panel.SetMinSize((200,200))
-        self.SetSizer(self.sizer)
-        self.SetMinSize((500,200))
-        #self.Fit()
+        sizer = wx.GridBagSizer(vgap=5, hgap =5)
+        sizer.Add(self.button3, (0,0))
+        sizer.Add(self.button1,(0,1))
+        sizer.Add(self.button2, (0,2))
+        sizer.Add(self.textleft, (1,5))
+        sizer.Add(self.textright, (2,5))
+        sizer.Add(self.textmid, (3,5))
+        sizer.Add(self.textcurr, (4,5))
+        #sizer.SetMinSize((100,100))
+        sizer.Add(self.sld, (1,0),(4,2))
+        sizer.Add(self.sld1, (1,2),(4,3))
+        self.panel.SetSizer(sizer)
+        self.panel.SetMinSize((1000,160))
+        Bigsizer = wx.BoxSizer(wx.HORIZONTAL)
+        self.wind.SetMinSize((300,160))
+        Bigsizer.Add(self.wind)
+        Bigsizer.Add(self.panel)
+        self.SetSizer(Bigsizer)
 
     def OpenData(self,event, handle):
         """file_wildcard = "All files(*.*)|*.*"
@@ -294,7 +304,8 @@ class SpecPanel(wx.Panel):
             self.wind.RiX = self.wind.ORiX*self.pos/200.0
             self.RightText(event)
         self.wind.Refresh()
-        self.wind.Scroll(self.currx*self.pos/200.0, 0)
+        if self.wind.LeftClickFlag == 1:
+            self.wind.Scroll(self.currx*self.pos/200.0, 0)
 
     def sliderUpdate2(self, event):
         self.pos = self.sld1.GetValue()
@@ -314,14 +325,14 @@ class SpecPanel(wx.Panel):
             self.wind.LeX = self.wind.LeX -self.pos/200.0
             self.wind.Refresh()
         #event.Skip()
-        self.LeftText()
+        self.LeftText(event)
         event.Skip()
 
     def RightButton(self, event):
         if self.wind.RightClickFlag == 1:
             self.wind.RiX = self.wind.RiX +self.pos/200.0
             self.wind.Refresh()
-        self.RightText()
+        self.RightText(event)
         event.Skip()
 
     def LeftText(self, event):
