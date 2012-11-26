@@ -70,8 +70,7 @@ class ImageWindow(wx.ScrolledWindow):
         dc.SetPen(wx.Pen('green',1))
         dc.DrawLine(self.CurrPos, 0, self.CurrPos, 150)
         del odc
-        #SKIP THE DRAWING OF RULER WHICH SEVERELY STUCK THE RENDERING
-        event.Skip()
+    
 
 
 
@@ -105,6 +104,7 @@ class ImageWindow(wx.ScrolledWindow):
         if self.Endr != self.Startr:
             self.Scroll(-self.CalcScrolledPosition(0,0)[0] + self.Endr - self.Startr, 0)
         event.Skip()
+
 
 class SimFrame(wx.Frame):
 
@@ -162,6 +162,7 @@ class SpecPanel(wx.Panel):
 
         self.wind = ImageWindow(self)
         self.wind.SetBitmap(self.im.ConvertToBitmap())
+        self.wind.Refresh()
         self.wind.SetScrollbars(1,0, self.im.GetWidth(), 200)
         wx.EVT_SLIDER(self.sld, self.sld.GetId(),self.sliderUpdate1)
         wx.EVT_SLIDER(self.sld1, self.sld1.GetId(),self.sliderUpdate2)
@@ -178,68 +179,34 @@ class SpecPanel(wx.Panel):
 
 
         sizer = wx.GridBagSizer(vgap=5, hgap =5)
-        sizer.Add(self.button3, (0,0))
-        sizer.Add(self.button1,(0,1))
-        sizer.Add(self.button2, (0,2))
-        sizer.Add(self.textleft, (1,5))
-        sizer.Add(self.textright, (2,5))
-        sizer.Add(self.textmid, (3,5))
-        sizer.Add(self.textcurr, (4,5))
-        #sizer.SetMinSize((100,100))
-        sizer.Add(self.sld, (1,0),(4,2))
-        sizer.Add(self.sld1, (1,2),(4,3))
+        sizer.Add(self.button3, (0,0), flag = wx.EXPAND)
+        sizer.Add(self.button1,(0,1),flag = wx.EXPAND)
+        sizer.Add(self.button2, (0,2),flag = wx.EXPAND)
+        sizer.Add(self.textleft, (1,5),flag = wx.EXPAND)
+        sizer.Add(self.textright, (2,5),flag = wx.EXPAND)
+        sizer.Add(self.textmid, (3,5),flag = wx.EXPAND)
+        sizer.Add(self.textcurr, (4,5),flag = wx.EXPAND)
+        sizer.AddGrowableCol(0)
+        sizer.AddGrowableCol(1)
+        sizer.AddGrowableCol(2)
+        sizer.AddGrowableCol(3)
+        sizer.AddGrowableRow(0)
+        sizer.AddGrowableRow(1)
+        sizer.AddGrowableRow(2)
+        sizer.AddGrowableRow(3)
+        sizer.SetMinSize((100,100))
+        sizer.Add(self.sld, (1,0),(4,2),flag = wx.EXPAND)
+        sizer.Add(self.sld1, (1,2),(4,3),flag = wx.EXPAND)
         self.panel.SetSizer(sizer)
         self.panel.SetMinSize((1000,160))
-        Bigsizer = wx.BoxSizer(wx.HORIZONTAL)
+        Bigsizer = wx.BoxSizer()
         self.wind.SetMinSize((300,160))
-        Bigsizer.Add(self.wind)
-        Bigsizer.Add(self.panel)
+        Bigsizer.Add(self.wind,proportion=1, flag=wx.ALL|wx.EXPAND)
+        Bigsizer.Add(self.panel,proportion=1, flag=wx.ALL|wx.EXPAND)
         self.SetSizer(Bigsizer)
 
     def OpenData(self,event, handle):
-        """file_wildcard = "All files(*.*)|*.*"
-        dlg = wx.FileDialog(self, "Open file...",
-            os.getcwd(),
-            style = wx.OPEN,
-            wildcard = file_wildcard)
-        if(dlg.ShowModal() == wx.ID_OK):
-            self.addr=dlg.GetPath()
-        dec = fd.ffmpeg_decoder(self.addr, output_rate = 8000)
-        spec = sp.spectrum(dec.ostream.get_handle(), window_size = 1024)
-        handle = spec.ostream.get_handle()
-
-        dec.start()
-        spec.start()"""
         self.handle = handle
-        """Num = 0
-
-        while handle.more_data():
-            iter = 0
-            q = []
-            pos, n, q = handle.read(1000, q)
-            for p in q:
-                if iter == 0:
-                    temp = p.T[::-1]
-                    vector = np.log(temp + 1)
-                else:
-                    temp = p.T[::-1]
-                    vector = np.append(vector, np.log(temp + 1), axis =1)
-                iter = iter +1
-                #plt.imshow(np.log(p.T+1))
-                #plt.show()
-            vector = vector/np.amax(vector)
-            vector = [vector, vector, vector]
-            vector = np.dstack(vector)
-            #plt.imsave(path, vector, cmap = cm.gray)
-            im = wx.ImageFromBuffer(int(np.size(vector, axis = 1)), int(np.size(vector, axis = 0)), np.uint8(vector))
-            if Num == 0:
-                specW = vector
-                list = [vector]
-            else:
-                specW = np.append(specW, vector, axis = 1)
-                list.append(vector)
-            Num = Num + 1
-        return specW"""
 
     def GetAddr(self, event, path):
         self.addr = path
@@ -254,10 +221,10 @@ class SpecPanel(wx.Panel):
             for p in q:
                 if iter == 0:
                     temp = p.T[::-1]
-                    vector = np.log(temp + 1)
+                    vector = np.log10(temp + 1)
                 else:
                     temp = p.T[::-1]
-                    vector = np.append(vector, np.log(temp + 1), axis =1)
+                    vector = np.append(vector, np.log10(temp + 1), axis =1)
                 iter = iter +1
                 #plt.imshow(np.log(p.T+1))
                 #plt.show()
