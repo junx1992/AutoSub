@@ -208,6 +208,9 @@ class MyFrame(wx.Frame):
                 BigSizer.SetMinSize((1120,650))
                 self.SetSizer(BigSizer)
                 self.SetMinSize((1120,650))
+
+                # bind the event of select item
+                self.subpanel.Bind(wx.EVT_LISTBOX_DCLICK,self.Select,self.subpanel.listBox)
                 
                 # finally create the timer, which updates the timeslider
                 self.timer = wx.Timer(self)
@@ -221,10 +224,22 @@ class MyFrame(wx.Frame):
 
                 # Set the Fast Key
                 acceltbl=wx.AcceleratorTable([(wx.ACCEL_CTRL,ord('O'),1),(wx.ACCEL_CTRL,ord('C'),2),(wx.ACCEL_CTRL,ord('P'),3),(wx.ACCEL_CTRL,ord('A'),4),(wx.ACCEL_CTRL,ord('S'),5),(wx.ACCEL_CTRL,ord('F'),6),(wx.ACCEL_CTRL,ord('V'),7)])
-                self.SetAcceleratorTable(acceltbl)               
+                self.SetAcceleratorTable(acceltbl)
+
                 
-        def SetTheSpec(self,evt):
-                return 
+                
+        def Select(self,evt):
+                self.subpanel.ChooseOneItem(self.subpanel)
+                begintime=self.subpanel.begintime.GetValue()
+                endtime=self.subpanel.endtime.GetValue()                
+                tmp_begin=begintime.split(':')
+                tmp_end=endtime.split(':')
+                if(len(tmp_begin)==3):
+                        begin_sec=int(tmp_begin[0])*60*60+int(tmp_begin[1])*60+float(tmp_begin[2])
+                        self.Spec.GetLeftLex(self.Spec,begin_sec)
+                if(len(tmp_end)==3):
+                        end_sec=int(tmp_end[0])*60*60+int(tmp_end[1])*60+float(tmp_end[2])
+                        self.Spec.GetRightLex(self.Spec,end_sec)
 
 
         def OnExit(self, evt):

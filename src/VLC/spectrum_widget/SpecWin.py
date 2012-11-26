@@ -356,6 +356,17 @@ class SpecPanel(wx.Panel):
         self.wind.Refresh()
         event.Skip()
 
+    def GetLeftLex(self,event,lefttime):
+        self.wind.LeftClickFlag =1    
+        self.wind.LeX=lefttime*self.ratio
+        #print self.wind.LeX
+        self.wind.Refresh()
+
+    def GetRightLex(self,event,righttime):
+        self.wind.RightClickFlag =1
+        self.wind.RiX=righttime*self.ratio
+        self.wind.Refresh()
+
     """def CurrText(self, event):
         self.textcurr.Clear()
         time = (self.wind.CurrPos) * 200.0/self.pos/self.ratio
