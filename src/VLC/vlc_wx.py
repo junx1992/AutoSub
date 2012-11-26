@@ -186,7 +186,7 @@ class MyFrame(wx.Frame):
 
                 SizerPart1=wx.BoxSizer(wx.VERTICAL)
                 
-                self.subpanel=Subtitle(self,-1)
+                self.subpanel=SubtitlePanel(self,-1)
                 self.Bind(wx.EVT_MENU, self.subpanel.OpenFile, op)
                 self.Bind(wx.EVT_MENU, self.subpanel.SaveFile, sa)
                 self.subpanel.SetMinSize((400,400))
@@ -538,6 +538,7 @@ class FeedBackDialog(wx.Dialog):
                 return self.mail.GetValue()
         def GetSuggestion(self):
                 return self.suggestion.GetValue()
+        
 
 class ShapedButton(wx.PyControl):
     def __init__(self, parent, normal, pressed=None, disabled=None):
@@ -607,6 +608,18 @@ class ShapedButton(wx.PyControl):
                 self.clicked = False
     def on_leave_window(self, event):
         self.clicked = False
+
+class SubtitlePanel(Subtitle):
+        def __init__(self,parent,id):
+                Subtitle.__init__(self,parent,id)
+
+
+        def SaveFile(self,event):
+                super(SubtitlePanel,self).SaveFile(self)
+                
+                
+        
+        
 
 
 
