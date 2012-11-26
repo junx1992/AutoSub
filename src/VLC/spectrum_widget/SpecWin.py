@@ -359,12 +359,14 @@ class SpecPanel(wx.Panel):
     def GetLeftLex(self,event,lefttime):
         self.wind.LeftClickFlag =1    
         self.wind.LeX=lefttime*self.ratio
-        #print self.wind.LeX
+        self.wind.Scroll(self.wind.LeX - 50, 0)
+        self.LeftText(wx.EVT_LEFT_UP)
         self.wind.Refresh()
 
     def GetRightLex(self,event,righttime):
         self.wind.RightClickFlag =1
         self.wind.RiX=righttime*self.ratio
+        self.RightText(wx.EVT_RIGHT_UP)
         self.wind.Refresh()
 
     """def CurrText(self, event):
