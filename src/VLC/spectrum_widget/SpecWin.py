@@ -328,7 +328,7 @@ class SpecPanel(wx.Panel):
             lefttext=str(int(time/60/60))+":"+str(int(time/60%60))+":"+str(int(time%60)) + ":"+str(int(((round(time, 2) - int(time))*100)))
             self.leftstr=lefttext
             self.textleft.WriteText(str(int(time/60/60))+":"+str(int(time/60%60))+":"+str(int(time%60)) + ":"+str(int(((round(time, 2) - int(time))*100))))
-        event.Skip()
+        
 
     def RightText(self, event):
         self.textright.Clear()
@@ -337,7 +337,7 @@ class SpecPanel(wx.Panel):
             righttext=str(int(time/60/60))+":"+str(int(time/60%60))+":"+str(int(time%60)) + ":"+str(int(((round(time, 2) - int(time))*100)))
             self.rightstr=righttext
             self.textright.WriteText(str(int(time/60/60))+":"+str(int(time/60%60))+":"+str(int(time%60)) + ":"+str(int(((round(time, 2) - int(time))*100))))
-        event.Skip()
+        
     def GetLeft(self,event):
         try:
             return self.leftstr
