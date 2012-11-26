@@ -325,18 +325,19 @@ class SpecPanel(wx.Panel):
         self.textleft.Clear()
         if self.wind.LeftClickFlag ==1:
             time = self.wind.LeX/self.ratio/self.pos*200
-            lefttext=str(int(time/60/60))+":"+str(int(time/60%60))+":"+str(int(time%60)) + ":"+str(int(((round(time, 2) - int(time))*100)))
+            lefttext=str(int(time/60/60))+":"+str(int(time/60%60))+":"+str(int(time%60)) + "."+str(int(((round(time, 2) - int(time))*100)))
             self.leftstr=lefttext
-            self.textleft.WriteText(str(int(time/60/60))+":"+str(int(time/60%60))+":"+str(int(time%60)) + ":"+str(int(((round(time, 2) - int(time))*100))))
+            self.textleft.WriteText(str(int(time/60/60))+":"+str(int(time/60%60))+":"+str(int(time%60)) + "."+str(int(((round(time, 2) - int(time))*100))))
         
 
     def RightText(self, event):
         self.textright.Clear()
         if self.wind.RightClickFlag==1:
             time = self.wind.RiX/self.ratio/self.pos*200
-            righttext=str(int(time/60/60))+":"+str(int(time/60%60))+":"+str(int(time%60)) + ":"+str(int(((round(time, 2) - int(time))*100)))
+            righttext=str(int(time/60/60))+":"+str(int(time/60%60))+":"+str(int(time%60)) + "."+str(int(((round(time, 2) - int(time))*100)))
             self.rightstr=righttext
-            self.textright.WriteText(str(int(time/60/60))+":"+str(int(time/60%60))+":"+str(int(time%60)) + ":"+str(int(((round(time, 2) - int(time))*100))))
+            self.textright.WriteText(str(int(time/60/60))+":"+str(int(time/60%60))+":"+str(int(time%60)) + "."+str(int(((round(time, 2) - int(time))*100))))
+        
         
     def GetLeft(self,event):
         try:

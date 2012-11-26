@@ -60,32 +60,32 @@ class MyFrame(wx.Frame):
                 self.frame_menubar.Append(self.sub, "Subtitle")
 
                 #  Video Menu
-                self.video_menu=wx.Menu()
-                self.video_menu.Append(-1,"NULL")
-                self.video_menu.AppendSeparator()
-                self.video_menu.Append(-1,"NULL")
-                self.frame_menubar.Append(self.video_menu, "Video")
+                #self.video_menu=wx.Menu()
+                #self.video_menu.Append(-1,"NULL")
+                #self.video_menu.AppendSeparator()
+                #self.video_menu.Append(-1,"NULL")
+                #self.frame_menubar.Append(self.video_menu, "Video")
 
 
                 #  Tools Menu
-                self.tools_menu=wx.Menu()
-                self.tools_menu.Append(-1,"NULL")
-                self.tools_menu.AppendSeparator()
-                self.tools_menu.Append(-1,"NULL")
-                self.frame_menubar.Append(self.tools_menu, "Tools")
+##                self.tools_menu=wx.Menu()
+####                self.tools_menu.Append(-1,"NULL")
+##                self.tools_menu.AppendSeparator()
+##                self.tools_menu.Append(-1,"NULL")
+##                self.frame_menubar.Append(self.tools_menu, "Tools")
 
                 #  View Menu
-                self.view_menu=wx.Menu()
-                self.view_menu.Append(-1,"NULL")
-                self.view_menu.AppendSeparator()
-                self.view_menu.Append(-1,"NULL")
-                self.frame_menubar.Append(self.view_menu, "View")
+##                self.view_menu=wx.Menu()
+##                self.view_menu.Append(-1,"NULL")
+##                self.view_menu.AppendSeparator()
+##                self.view_menu.Append(-1,"NULL")
+##                self.frame_menubar.Append(self.view_menu, "View")
 
                 #  Help Menu
                 self.help_menu=wx.Menu()                
                 menu_feedback=self.help_menu.Append(-1,"&FeedBack")
                 self.help_menu.AppendSeparator()
-                self.help_menu.Append(-1,"NULL")
+##                self.help_menu.Append(-1,"NULL")
                 self.frame_menubar.Append(self.help_menu, "Help")
                 self.SetMenuBar(self.frame_menubar)
                 
@@ -188,7 +188,7 @@ class MyFrame(wx.Frame):
                 
                 self.subpanel=SubtitlePanel(self,-1)
                 self.Bind(wx.EVT_MENU, self.subpanel.OpenFile, op)
-                self.Bind(wx.EVT_MENU, self.subpanel.SaveFile, sa)
+                self.Bind(wx.EVT_MENU, self.SaveSubtitle, sa)
                 self.subpanel.SetMinSize((400,400))
                 self.subpanel.SetMaxSize((400,400))
                 
@@ -225,6 +225,10 @@ class MyFrame(wx.Frame):
                 # Set the Fast Key
                 acceltbl=wx.AcceleratorTable([(wx.ACCEL_CTRL,ord('O'),1),(wx.ACCEL_CTRL,ord('C'),2),(wx.ACCEL_CTRL,ord('P'),3),(wx.ACCEL_CTRL,ord('A'),4),(wx.ACCEL_CTRL,ord('S'),5),(wx.ACCEL_CTRL,ord('F'),6),(wx.ACCEL_CTRL,ord('V'),7)])
                 self.SetAcceleratorTable(acceltbl)
+
+        def SaveSubtitle(self,evt):
+                self.subpanel.SaveFile(self.subpanel)
+                self.player.video_set_subtitle_file(self.subpanel.filename)
 
                 
                 
@@ -612,7 +616,6 @@ class ShapedButton(wx.PyControl):
 class SubtitlePanel(Subtitle):
         def __init__(self,parent,id):
                 Subtitle.__init__(self,parent,id)
-
 
         def SaveFile(self,event):
                 super(SubtitlePanel,self).SaveFile(self)
