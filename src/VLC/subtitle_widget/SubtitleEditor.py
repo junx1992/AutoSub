@@ -380,8 +380,8 @@ class Subtitle(wx.Panel):
         self.endtime.SetValue(righttime)
     def AddSub(self,event,st,et,context):
         srt=' '+st+' -- '+et+' '+context;
-        ad=srt.decode('utf-8','ignore');
-        self.listBox.Append(ad);
+        #ad=srt.decode('utf-8','ignore');
+        self.listBox.Append(srt);
         
     def OpenTheFile(self,event,url):
         foot=url;
