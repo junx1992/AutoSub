@@ -123,13 +123,13 @@ class MyFrame(wx.Frame):
                 self.displaytime.SetFont(myfont)
 
                 #  pause button                              
-                self.pausebmp=wx.Bitmap("./VLC/Icons/pause.png",wx.BITMAP_TYPE_PNG)
-                self.pausebmp.SetSize(size=(40,40))                
+                pausebmp=wx.Bitmap("./VLC/Icons/pause.png",wx.BITMAP_TYPE_PNG)
+                pausebmp.SetSize(size=(40,40))                
                 #  play button
-                self.playbmp=wx.Bitmap("./VLC/Icons/play.png",wx.BITMAP_TYPE_PNG)                
-                self.playbmp.SetSize(size=(40,40))                
+                playbmp=wx.Bitmap("./VLC/Icons/play.png",wx.BITMAP_TYPE_PNG)                
+                playbmp.SetSize(size=(40,40))                
                 self.play   = pbtn.PlateButton(ctrlpanel)                            
-                self.play.SetBitmap(bmp=self.playbmp)                             
+                self.play.SetBitmap(bmp=playbmp)                             
                 
                 #  volume button
                 self.volume = pbtn.PlateButton(ctrlpanel)                
@@ -214,7 +214,7 @@ class MyFrame(wx.Frame):
                 self.Bind(wx.EVT_TIMER, self.OnTimer, self.timer)
 
                 # VLC player controls
-                self.Instance = vlc.Instance('--subsdec-encoding=UTF-8','--freetype-font=PMingLiU')
+                self.Instance = vlc.Instance('--subsdec-encoding=GB18030','--freetype-font=PMingLiU')
                 self.player = self.Instance.media_player_new()
 
                 self.Bind(wx.EVT_CLOSE,self.OnExit)
@@ -293,15 +293,22 @@ class MyFrame(wx.Frame):
                                 
 
         def OnPlayButton(self,evt):
+                pausebmp=wx.Bitmap("./VLC/Icons/pause.png",wx.BITMAP_TYPE_PNG)
+                pausebmp.SetSize(size=(40,40))
+
+                playbmp=wx.Bitmap("./VLC/Icons/play.png",wx.BITMAP_TYPE_PNG)                
+                playbmp.SetSize(size=(40,40))    
+                
                 if not self.player.get_media():
                         self.OnOpen(None)
+                        self.play.SetBitmap(bmp=pausebmp)
                 else:
                         self.OnPause(self)
                         if self.player.is_playing()==True:                                                           
-                                self.play.SetBitmap(bmp=self.pausebmp)
+                                self.play.SetBitmap(bmp=playbmp)
                                 
                         else:                                
-                                self.play.SetBitmap(bmp=self.playbmp)                                
+                                self.play.SetBitmap(bmp=pausebmp)                                
 
         def OnPause(self, evt):
                 """Pause the player.
