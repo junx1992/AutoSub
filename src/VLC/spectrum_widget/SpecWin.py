@@ -148,8 +148,8 @@ class SpecPanel(wx.Panel):
         self.button3 = wx.Button(self.panel, id=3, label='Start', pos=(80,5), size = (30,25))
         self.button1.Bind(wx.EVT_BUTTON, self.LeftButton)
         self.button2.Bind(wx.EVT_BUTTON, self.RightButton)
-        self.button1.Bind(wx.EVT_BUTTON, self.LeftText)
-        self.button2.Bind(wx.EVT_BUTTON, self.RightText)
+        #self.button1.Bind(wx.EVT_BUTTON, self.LeftText)
+        #self.button2.Bind(wx.EVT_BUTTON, self.RightText)
         self.button3.Bind(wx.EVT_BUTTON, self.GetData)
         self.textleft = wx.TextCtrl(self.panel, id=3, pos=(115, 40), size=(70, 25))
         self.textright = wx.TextCtrl(self.panel, id=4, pos=(115, 70), size=(70, 25))
@@ -313,12 +313,15 @@ class SpecPanel(wx.Panel):
         if self.wind.LeftClickFlag == 1:
             self.wind.LeX = self.wind.LeX -self.pos/200.0
             self.wind.Refresh()
+        #event.Skip()
+        self.LeftText()
         event.Skip()
 
     def RightButton(self, event):
         if self.wind.RightClickFlag == 1:
             self.wind.RiX = self.wind.RiX +self.pos/200.0
             self.wind.Refresh()
+        self.RightText()
         event.Skip()
 
     def LeftText(self, event):
@@ -328,7 +331,8 @@ class SpecPanel(wx.Panel):
             lefttext=str(int(time/60/60))+":"+str(int(time/60%60))+":"+str(int(time%60)) + "."+str(int(((round(time, 2) - int(time))*100)))
             self.leftstr=lefttext
             self.textleft.WriteText(str(int(time/60/60))+":"+str(int(time/60%60))+":"+str(int(time%60)) + "."+str(int(((round(time, 2) - int(time))*100))))
-        event.Skip()
+        #event.Skip()
+        return
         
 
     def RightText(self, event):
@@ -338,8 +342,8 @@ class SpecPanel(wx.Panel):
             righttext=str(int(time/60/60))+":"+str(int(time/60%60))+":"+str(int(time%60)) + "."+str(int(((round(time, 2) - int(time))*100)))
             self.rightstr=righttext
             self.textright.WriteText(str(int(time/60/60))+":"+str(int(time/60%60))+":"+str(int(time%60)) + "."+str(int(((round(time, 2) - int(time))*100))))
-        event.Skip()
-        
+        #event.Skip()
+        return
         
     def GetLeft(self,event):
         try:
