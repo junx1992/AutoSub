@@ -328,6 +328,7 @@ class SpecPanel(wx.Panel):
             lefttext=str(int(time/60/60))+":"+str(int(time/60%60))+":"+str(int(time%60)) + "."+str(int(((round(time, 2) - int(time))*100)))
             self.leftstr=lefttext
             self.textleft.WriteText(str(int(time/60/60))+":"+str(int(time/60%60))+":"+str(int(time%60)) + "."+str(int(((round(time, 2) - int(time))*100))))
+        event.Skip()
         
 
     def RightText(self, event):
@@ -337,6 +338,7 @@ class SpecPanel(wx.Panel):
             righttext=str(int(time/60/60))+":"+str(int(time/60%60))+":"+str(int(time%60)) + "."+str(int(((round(time, 2) - int(time))*100)))
             self.rightstr=righttext
             self.textright.WriteText(str(int(time/60/60))+":"+str(int(time/60%60))+":"+str(int(time%60)) + "."+str(int(((round(time, 2) - int(time))*100))))
+        event.Skip()
         
         
     def GetLeft(self,event):
@@ -361,13 +363,13 @@ class SpecPanel(wx.Panel):
         self.wind.LeftClickFlag =1    
         self.wind.LeX=lefttime*self.ratio
         self.wind.Scroll(self.wind.LeX - 50, 0)
-        self.LeftText(wx.EVT_LEFT_UP)
+        self.LeftText(event)
         self.wind.Refresh()
 
     def GetRightLex(self,event,righttime):
         self.wind.RightClickFlag =1
         self.wind.RiX=righttime*self.ratio
-        self.RightText(wx.EVT_RIGHT_UP)
+        self.RightText(event)
         self.wind.Refresh()
 
     """def CurrText(self, event):
