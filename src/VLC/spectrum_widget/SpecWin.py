@@ -120,6 +120,10 @@ class SpecPanel(wx.Panel):
         wx.Panel.__init__(self,parent,-1)
 
         self.Spec_Flag = 0
+        Background=(57,59,66)
+        myfont = wx.Font(11,wx.SWISS, wx.NORMAL, wx.NORMAL,False,u'Segoe UI')
+        back = (77,77,77)
+        FontColour=(229,229,229)
         self.orim = wx.Image(iconadd, wx.BITMAP_TYPE_JPEG)
         
         #SET THE DEFAULT VALUE OF THE SLIDER POS
@@ -130,10 +134,10 @@ class SpecPanel(wx.Panel):
         self.ratio = 15.69565217391304
 
         self.sld = wx.Slider(self.panel, value = 200, minValue = 150, maxValue =500,
-            size=(55, 150), style=wx.SL_VERTICAL | wx.SL_AUTOTICKS | wx.SL_LABELS, name='width')
+            size=(10, 25), style=wx.SL_VERTICAL | wx.SL_AUTOTICKS|wx.SL_LABELS, name='width')
         self.sld.SetTickFreq(20, 1)
         self.sld1 = wx.Slider(self.panel, value = 200, minValue = 150, maxValue =500,
-            size=(55, 150), style=wx.SL_VERTICAL| wx.SL_AUTOTICKS | wx.SL_LABELS)
+            size=(10, 25), style=wx.SL_VERTICAL| wx.SL_AUTOTICKS|wx.SL_LABELS)
         self.sld1.SetTickFreq(20, 1)
 
         self.Bind(wx.EVT_MENU, self.LeftButton, id=1)
@@ -143,18 +147,40 @@ class SpecPanel(wx.Panel):
         self.SetAcceleratorTable(acceltbl)
 
         #ADD TWO BUTTONS TO MANIPULATE THE LEFT AND RIGHT BORDER
-        self.button1 = wx.Button(self.panel, id=1, label='left',  size = (30,25))
-        self.button2 = wx.Button(self.panel, id=2, label='right',  size = (30,25))
-        self.button3 = wx.Button(self.panel, id=3, label='Start', size = (30,25))
+        self.button1 = wx.Button(self.panel, id=1, label='left',  size = (10,25))
+        self.button2 = wx.Button(self.panel, id=2, label='right',  size = (10,25))
+        self.button3 = wx.Button(self.panel, id=3, label='start', size = (30,25))
+        self.button1.SetFont(myfont)
+        self.button1.SetBackgroundColour(back)
+        self.button1.SetForegroundColour(FontColour)
+        self.button2.SetFont(myfont)
+        self.button2.SetBackgroundColour(back)
+        self.button2.SetForegroundColour(FontColour)
+        self.button3.SetFont(myfont)
+        self.button3.SetBackgroundColour(back)
+        self.button3.SetForegroundColour(FontColour)
         self.button1.Bind(wx.EVT_BUTTON, self.LeftButton)
         self.button2.Bind(wx.EVT_BUTTON, self.RightButton)
         #self.button1.Bind(wx.EVT_BUTTON, self.LeftText)
         #self.button2.Bind(wx.EVT_BUTTON, self.RightText)
         self.button3.Bind(wx.EVT_BUTTON, self.GetData)
-        self.textleft = wx.TextCtrl(self.panel, id=3, size=(70, 25))
-        self.textright = wx.TextCtrl(self.panel, id=4,  size=(70, 25))
-        self.textmid = wx.TextCtrl(self.panel, id=5,  size=(70,25))
-        self.textcurr = wx.TextCtrl(self.panel, id=6,  size=(70,25))
+        self.textleft = wx.TextCtrl(self.panel, id=3, size=(30, 25))
+        self.textright = wx.TextCtrl(self.panel, id=4,  size=(30, 25))
+        self.textmid = wx.TextCtrl(self.panel, id=5,  size=(30,25))
+        self.textcurr = wx.TextCtrl(self.panel, id=6,  size=(30,25))
+        self.textleft.SetBackgroundColour((57,59,66))
+        self.textleft.SetFont(myfont)
+        self.textleft.SetForegroundColour(FontColour)
+        self.textright.SetBackgroundColour((57,59,66))
+        self.textright.SetFont(myfont)
+        self.textright.SetForegroundColour(FontColour)
+        self.textmid.SetBackgroundColour((57,59,66))
+        self.textmid.SetFont(myfont)
+        self.textmid.SetForegroundColour(FontColour)
+        self.textcurr.SetBackgroundColour((57,59,66))
+        self.textcurr.SetFont(myfont)
+        self.textcurr.SetForegroundColour(FontColour)
+
             
         self.im = self.orim
         self.bm = self.im.ConvertToBitmap()
@@ -179,13 +205,13 @@ class SpecPanel(wx.Panel):
 
 
         sizer = wx.GridBagSizer(vgap=5, hgap =5)
-        sizer.Add(self.button3, (0,0), flag = wx.EXPAND)
-        sizer.Add(self.button1,(0,1),flag = wx.EXPAND)
-        sizer.Add(self.button2, (0,2),flag = wx.EXPAND)
-        sizer.Add(self.textleft, (1,5),flag = wx.EXPAND)
-        sizer.Add(self.textright, (2,5),flag = wx.EXPAND)
-        sizer.Add(self.textmid, (3,5),flag = wx.EXPAND)
-        sizer.Add(self.textcurr, (4,5),flag = wx.EXPAND)
+        sizer.Add(self.button1, (0,0), flag = wx.EXPAND)
+        sizer.Add(self.button2,(0,1),flag = wx.EXPAND)
+        sizer.Add(self.button3, (0,2),(1,2),flag = wx.EXPAND)
+        sizer.Add(self.textleft, (1,2),flag = wx.EXPAND)
+        sizer.Add(self.textright, (2,2),flag = wx.EXPAND)
+        sizer.Add(self.textmid, (3,2),flag = wx.EXPAND)
+        sizer.Add(self.textcurr, (4,2),flag = wx.EXPAND)
         sizer.AddGrowableCol(0)
         sizer.AddGrowableCol(1)
         sizer.AddGrowableCol(2)
@@ -195,8 +221,8 @@ class SpecPanel(wx.Panel):
         sizer.AddGrowableRow(2)
         sizer.AddGrowableRow(3)
         sizer.SetMinSize((100,100))
-        sizer.Add(self.sld, (1,0),(4,2),flag = wx.EXPAND)
-        sizer.Add(self.sld1, (1,2),(4,3),flag = wx.EXPAND)
+        sizer.Add(self.sld, (1,0),(4,1),flag = wx.EXPAND)
+        sizer.Add(self.sld1, (1,1),(4,1),flag = wx.EXPAND)
         self.panel.SetSizer(sizer)
         self.panel.SetMinSize((1000,160))
         Bigsizer = wx.BoxSizer()
@@ -204,6 +230,7 @@ class SpecPanel(wx.Panel):
         Bigsizer.Add(self.wind,proportion=1, flag=wx.ALL|wx.EXPAND)
         Bigsizer.Add(self.panel,proportion=1, flag=wx.ALL|wx.EXPAND)
         self.SetSizer(Bigsizer)
+        self.SetBackgroundColour(Background)
 
     def OpenData(self,event, handle):
         self.handle = handle
