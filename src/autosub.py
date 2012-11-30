@@ -16,9 +16,7 @@ sys.path.append("/VLC")
 class MainFrame(wx.Frame):
     """ The Main Window"""
     def __init__(self,title):
-        frame=wx.Frame.__init__(self,None,-1,title)
-
-        
+        frame=wx.Frame.__init__(self,None,-1,title)        
         # Attribute
         myfont=wx.Font(11, wx.SWISS, wx.NORMAL, wx.NORMAL,False, u'Segoe UI')
         Backgroud=(57,59,66)
@@ -35,8 +33,7 @@ class MainFrame(wx.Frame):
         self.dec=None
         self.vad=None
         self.sub=None
-        self.specd=None
-        
+        self.specd=None        
         self.end=0
         # Menu
         #Menu Bar
@@ -47,12 +44,8 @@ class MainFrame(wx.Frame):
         self.file_menu=wx.Menu()
         menu_open=self.file_menu.Append(-1,"&Open \tCtrl+O")
         self.file_menu.AppendSeparator()
-        menu_close=self.file_menu.Append(-1,"&Close \tCtrl+C")
-        self.Bind(wx.EVT_MENU, self.OnOpen, menu_open)
-        self.Bind(wx.EVT_MENU, self.OnExit, menu_close)
+        menu_close=self.file_menu.Append(-1,"&Close \tCtrl+C")        
         self.frame_menubar.Append(self.file_menu, "&File")
-
-
         #  Edit Menu
         self.edit_menu=wx.Menu()
         menu_play=self.edit_menu.Append(-1,"&Play \tCtrl+P")
@@ -65,7 +58,6 @@ class MainFrame(wx.Frame):
         self.edit_menu.AppendSeparator()
         menu_volume=self.edit_menu.Append(-1,"&Volume \tCtrl+V")
         self.edit_menu.AppendSeparator()
-
         self.frame_menubar.Append(self.edit_menu, "&Edit")
 
         #  Sub Menu
@@ -79,11 +71,7 @@ class MainFrame(wx.Frame):
         menu_feedback=self.help_menu.Append(-1,"&FeedBack")
         self.help_menu.AppendSeparator()
         self.frame_menubar.Append(self.help_menu, "Help")
-        self.SetMenuBar(self.frame_menubar)
-        
-        # Layout
-        self.__DoLayout__()
-        self.mainpanel.SetBackgroundColour(wx.BLACK)
+        self.SetMenuBar(self.frame_menubar)   
 
         # Bind Event
         #  Menu Bind
@@ -103,23 +91,48 @@ class MainFrame(wx.Frame):
         self.playerpanel.Bind(wx.EVT_BUTTON,self.OnPlayButton,self.playerpanel.play)
         self.playerpanel.Bind(wx.EVT_TIMER, self.OnTimer, self.playerpanel.timer)
         self.Bind(wx.EVT_CLOSE,self.OnExit)
+        
+        #self.Bind(wx.EVT_MAXIMIZE, self.RePaint,self)
+        #self.Bind(wx.EVT_SIZE,self.RePaint,self)
 
+        # Layout
+        self.__DoLayout__()
+        self.flag=False
+        self.mainpanel.SetBackgroundColour(wx.BLACK)
+        
     def __DoLayout__(self):    
-
+        self.subpanel.Show()
+        self.spec.Show()
+        self.splitter.Show()
         BigSizer=wx.GridBagSizer(hgap=0,vgap=0)
         BigSizer.Add(self.subpanel,(0,0),flag=wx.EXPAND)
         BigSizer.Add(self.spec,(1,0),flag=wx.EXPAND)
         BigSizer.Add(self.splitter,(0,1),(2,1))
         BigSizer.Add(self.playerpanel,(0,2),(2,1),flag=wx.EXPAND)
 
-        BigSizer.AddGrowableRow(0,4)
-        BigSizer.AddGrowableRow(1,1)
+        BigSizer.AddGrowableRow(0,5)
+        BigSizer.AddGrowableRow(1,2)
         BigSizer.AddGrowableCol(0,3)        
         BigSizer.AddGrowableCol(2,4)
         self.mainpanel.SetSizer(BigSizer)
         self.SetMinSize((1020,650))        
         self.Centre()
-        self.GetPaint()
+        #self.DoPaint()
+        self.Refresh()
+
+    def __DoLayoutTwo__(self):
+        self.subpanel.Hide()
+        self.spec.Hide()
+        self.splitter.Hide()
+        BigSizer=wx.GridBagSizer(hgap=0,vgap=0)
+        BigSizer.Add(self.playerpanel,(0,0),flag=wx.EXPAND)
+        BigSizer.AddGrowableRow(0)
+        BigSizer.AddGrowableCol(0)
+        self.mainpanel.SetSizer(BigSizer)
+        self.SetMinSize((1020,650))        
+        self.Centre()
+        #self.DoPaint()
+        
         
 
     def Select(self,evt):
@@ -136,7 +149,8 @@ class MainFrame(wx.Frame):
                 self.spec.GetRightLex(self.spec,end_sec)
 
     def OnOpen(self,evt):        
-        self.playerpanel.OnOpen(None)        
+        self.playerpanel.OnOpen(None)
+        self.bitmap.Hide()
         self.SetTitle("%s - AutoSub" % self.playerpanel.title)
         lan={"English":"en" ,"Chinese":"zh-cn" ,"Japanese":"ja"}
         lang_from = None
@@ -248,19 +262,31 @@ class MainFrame(wx.Frame):
         self.playerpanel.player.stop()
         evt.Skip()
         self.Destroy()
-        
 
-    def GetPaint(self):       
-
+    def DoPaint(self):        
         img=wx.Image("./Icons/StartPage.jpg", wx.BITMAP_TYPE_ANY)
-        tempsize=self.playerpanel.videopanel.GetSize()        
-        
+        tempsize=self.playerpanel.videopanel.GetSize()                
         img.Rescale(width=tempsize.x,height=tempsize.y)
         img=img.ConvertToBitmap()
         self.bitmap=wx.StaticBitmap(self.playerpanel.videopanel,-1,img,(0,0))
         
 
-    def OnToggleFullScreen(self, evt):
+    def RePaint(self,evt):
+        evt.Skip()
+        self.bitmap.Destroy()
+        img=wx.Image("./Icons/StartPage.jpg", wx.BITMAP_TYPE_ANY)
+        tempsize=self.playerpanel.videopanel.GetSize()
+        #print tempsize
+        img.Rescale(width=tempsize.x,height=tempsize.y)
+        img=img.ConvertToBitmap()
+        self.bitmap=wx.StaticBitmap(self.playerpanel.videopanel,-1,img,(0,0))        
+
+    def OnToggleFullScreen(self,evt):
+        self.flag=not self.flag
+        if(self.flag==True):
+            self.__DoLayoutTwo__()
+        else:
+            self.__DoLayout__()
         is_fullscreen=self.IsFullScreen()
         self.ShowFullScreen(show= not is_fullscreen)
 
@@ -283,11 +309,7 @@ if __name__ == '__main__':
         
         #PlayerFrame.Centre()
         
-        PlayerFrame.Show()
-        
-        #PlayerFrame.GetPaint()
-        
-        
+        PlayerFrame.Show() 
         app.MainLoop()
         
             
