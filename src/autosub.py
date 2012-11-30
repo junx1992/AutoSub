@@ -31,7 +31,13 @@ class MainFrame(wx.Frame):
         self.spec=SpecPanel(self.mainpanel,"VLC/spectrum_widget/Icon/speceg.jpg")
         self.splitter = wx.SplitterWindow(self.mainpanel, -1, style=wx.SP_3D)
         self.subtitle=None
+        
         self.ohandle=None
+        self.dec=None
+        self.vad=None
+        self.sub=None
+        self.specd=None
+        
         self.end=0
         # Menu
         #Menu Bar
@@ -63,12 +69,12 @@ class MainFrame(wx.Frame):
 
         self.frame_menubar.Append(self.edit_menu, "&Edit")
 
-        #  Audio Menu
-        self.sub=wx.Menu()
-        op=self.sub.Append(-1,"Open Subtitle")
-        self.sub.AppendSeparator()
-        sa=self.sub.Append(-1,"Save Subtitle")
-        self.frame_menubar.Append(self.sub, "Subtitle")
+        #  Sub Menu
+        self.sub_menu=wx.Menu()
+        op=self.sub_menu.Append(-1,"Open Subtitle")
+        self.sub_menu.AppendSeparator()
+        sa=self.sub_menu.Append(-1,"Save Subtitle")
+        self.frame_menubar.Append(self.sub_menu, "Subtitle")
         #  Help Menu
         self.help_menu=wx.Menu()                
         menu_feedback=self.help_menu.Append(-1,"&FeedBack")
@@ -128,7 +134,7 @@ class MainFrame(wx.Frame):
                 self.spec.GetRightLex(self.spec,end_sec)
 
     def OnOpen(self,evt):        
-        self.playerpanel.OnOpen(None)
+        self.playerpanel.OnOpen(None)        
         self.SetTitle("%s - AutoSub" % self.playerpanel.title)
         lan={"English":"en" ,"Chinese":"zh-cn" ,"Japanese":"ja"}
         lang_from = None
@@ -151,18 +157,18 @@ class MainFrame(wx.Frame):
         
         self.currentfile=None
         
-        dec = fd.ffmpeg_decoder(source,output_rate = 8000)
-        vad = naive_vad(dec.ostream.get_handle())
-        sub = sg.sub_generator(vad.ostream.get_handle(), source, target, lang_from = lang_from, lang_to = lang_to)
+        self.dec = fd.ffmpeg_decoder(source,output_rate = 8000)
+        self.vad = naive_vad(self.dec.ostream.get_handle())
+        self.sub = sg.sub_generator(self.vad.ostream.get_handle(), source, target, lang_from = lang_from, lang_to = lang_to)
         
-        self.ohandle = sub.ostream.get_handle()
-        spec = sp.spectrum(dec.ostream.get_handle(), window_size = 1024)
-        handle = spec.ostream.get_handle()
+        self.ohandle = self.sub.ostream.get_handle()
+        self.specd = sp.spectrum(self.dec.ostream.get_handle(), window_size = 1024)
+        handle = self.specd.ostream.get_handle()
         #self.Spec.OpenData(self.Spec,self.ohandle)
-        dec.start()
-        vad.start()
-        sub.start()
-        spec.start()
+        self.dec.start()
+        self.vad.start()
+        self.sub.start()
+        self.specd.start()
         self.spec.OpenData(self.spec,handle)
 
     def SaveSubtitle(self,evt):
@@ -225,7 +231,7 @@ class MainFrame(wx.Frame):
         rr=self.spec.GetRight(self.spec)
         if(rr!="-1"):
                 self.subpanel.SetRight(self.subpanel,rr)
-        
+                
         if self.ohandle.has_data(1):            
             (start,self.end,text)=self.ohandle.read(1)[2][0][0]            
             self.playerpanel.player.video_set_subtitle_file(self.subtitle)
@@ -236,19 +242,35 @@ class MainFrame(wx.Frame):
         if self.playerpanel.player.get_length()!=0:
             self.playerpanel.buffergauge.SetValue(self.end*self.playerpanel.buffergauge.GetRange()*1000/self.playerpanel.player.get_length())
     def OnExit(self, evt):
+        #if(self.specd!=None):
+            #self.specd.exit()
+        #if(self.sub!=None):
+            #self.sub.exit()
+        #if(self.vad!=None):
+            #self.vad.exit()
+        #if(self.dec!=None):
+            #self.dec.exit()
+            
         self.playerpanel.player.stop()
-        self.Close()
+        #self.Close()
         evt.Skip()
+        self.Destroy()
+        
+        
 
     def OnToggleFullScreen(self, evt):
         is_fullscreen=self.IsFullScreen()
         self.ShowFullScreen(show= not is_fullscreen)
 
+class MyApp(wx.PySimpleApp):
+    def __init__(self):
+        app=wx.PySimpleApp.__init__(self)
+
 
 
 if __name__ == '__main__':
         # Create a wx.App(), which handles the windowing system event loop
-        app = wx.PySimpleApp()
+        app = MyApp()        
         # Create the window containing our small media player
         PlayerFrame = MainFrame("AutoSub")
         # Subtitle(PlayerFrame, title='Subtitle',positon=(1100,300))
@@ -256,5 +278,7 @@ if __name__ == '__main__':
         app.SetTopWindow(PlayerFrame)
         # show the player window centred and run the application
         PlayerFrame.Centre()
-        PlayerFrame.Show()
+        PlayerFrame.Show()        
         app.MainLoop()
+        
+            
