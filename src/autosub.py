@@ -30,8 +30,7 @@ class MainFrame(wx.Frame):
         self.subpanel=Subtitle(self.mainpanel,-1)
         self.spec=SpecPanel(self.mainpanel,"VLC/spectrum_widget/Icon/speceg.jpg")
         self.splitter = wx.SplitterWindow(self.mainpanel, -1, style=wx.SP_3D)
-        self.subtitle=None
-        
+        self.subtitle=None        
         self.ohandle=None
         self.dec=None
         self.vad=None
@@ -241,21 +240,14 @@ class MainFrame(wx.Frame):
             # Set buffer time
         if self.playerpanel.player.get_length()!=0:
             self.playerpanel.buffergauge.SetValue(self.end*self.playerpanel.buffergauge.GetRange()*1000/self.playerpanel.player.get_length())
-    def OnExit(self, evt):
-        #if(self.specd!=None):
-            #self.specd.exit()
-        #if(self.sub!=None):
-            #self.sub.exit()
-        #if(self.vad!=None):
-            #self.vad.exit()
-        #if(self.dec!=None):
-            #self.dec.exit()
+    def OnExit(self, evt):        
             
         self.playerpanel.player.stop()
         #self.Close()
         evt.Skip()
         self.Destroy()
-        
+        #sys.exit()
+             
         
 
     def OnToggleFullScreen(self, evt):
