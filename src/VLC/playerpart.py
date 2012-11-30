@@ -24,6 +24,7 @@ class PlayerPanel(wx.Panel):
         # The first panel of the video
         self.videopanel = wx.Panel(self, -1)
         self.videopanel.SetBackgroundColour(wx.BLACK)
+        
 
         # The second panel holds controls
         self.ctrlpanel = wx.Panel(self, -1 )        

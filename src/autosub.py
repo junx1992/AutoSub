@@ -114,10 +114,13 @@ class MainFrame(wx.Frame):
 
         BigSizer.AddGrowableRow(0,4)
         BigSizer.AddGrowableRow(1,1)
-        BigSizer.AddGrowableCol(0,1)        
-        BigSizer.AddGrowableCol(2,2)
+        BigSizer.AddGrowableCol(0,3)        
+        BigSizer.AddGrowableCol(2,4)
         self.mainpanel.SetSizer(BigSizer)
-        self.SetMinSize((1050,800))
+        self.SetMinSize((1020,650))        
+        self.Centre()
+        self.GetPaint()
+        
 
     def Select(self,evt):
         self.subpanel.ChooseOneItem(self.subpanel)
@@ -240,14 +243,21 @@ class MainFrame(wx.Frame):
             # Set buffer time
         if self.playerpanel.player.get_length()!=0:
             self.playerpanel.buffergauge.SetValue(self.end*self.playerpanel.buffergauge.GetRange()*1000/self.playerpanel.player.get_length())
-    def OnExit(self, evt):        
-            
+
+    def OnExit(self, evt):   
         self.playerpanel.player.stop()
-        #self.Close()
         evt.Skip()
         self.Destroy()
-        #sys.exit()
-             
+        
+
+    def GetPaint(self):       
+
+        img=wx.Image("./Icons/StartPage.jpg", wx.BITMAP_TYPE_ANY)
+        tempsize=self.playerpanel.videopanel.GetSize()        
+        
+        img.Rescale(width=tempsize.x,height=tempsize.y)
+        img=img.ConvertToBitmap()
+        self.bitmap=wx.StaticBitmap(self.playerpanel.videopanel,-1,img,(0,0))
         
 
     def OnToggleFullScreen(self, evt):
@@ -265,12 +275,19 @@ if __name__ == '__main__':
         app = MyApp()        
         # Create the window containing our small media player
         PlayerFrame = MainFrame("AutoSub")
+        
         # Subtitle(PlayerFrame, title='Subtitle',positon=(1100,300))
         PlayerFrame.SetPosition((0,0))
-        app.SetTopWindow(PlayerFrame)
+        #app.SetTopWindow(PlayerFrame)
         # show the player window centred and run the application
-        PlayerFrame.Centre()
-        PlayerFrame.Show()        
+        
+        #PlayerFrame.Centre()
+        
+        PlayerFrame.Show()
+        
+        #PlayerFrame.GetPaint()
+        
+        
         app.MainLoop()
         
             

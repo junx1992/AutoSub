@@ -231,8 +231,8 @@ class SpecPanel(wx.Panel):
         self.panel.SetMinSize((100,200))
         Bigsizer = wx.BoxSizer()
         self.wind.SetMinSize((150,200))
-        Bigsizer.Add(self.wind,proportion=1, flag=wx.ALL|wx.EXPAND)
-        Bigsizer.Add(self.panel,proportion=1, flag=wx.ALL|wx.EXPAND)
+        Bigsizer.Add(self.wind,proportion=3, flag=wx.ALL|wx.EXPAND)
+        Bigsizer.Add(self.panel,proportion=2, flag=wx.ALL|wx.EXPAND)
         self.SetSizer(Bigsizer)
         self.SetBackgroundColour(Background)
 

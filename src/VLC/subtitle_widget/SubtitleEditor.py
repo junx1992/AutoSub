@@ -78,16 +78,16 @@ class Subtitle(wx.Panel):
 
     def __DoLayout__(self):
         sizer=wx.GridBagSizer(vgap=0, hgap=0)
-        sizer.Add(self.begintext,(1,1))
-        sizer.Add(self.begintime,(2,1),(1,5),wx.EXPAND)
-        sizer.Add(self.endtext,(3,1))
-        sizer.Add(self.endtime,(4,1),(1,5),wx.EXPAND)
-        sizer.Add(self.text,(5,1))
-        sizer.Add(self.TextCtrl,(6,1),(2,5),wx.EXPAND)
-        sizer.Add(self.listBox,(9,1),(4,5),wx.EXPAND)
-        sizer.Add(self.save,(13,1))
-        sizer.Add(self.add,(13,3))
-        sizer.Add(self.delete,(13,5))
+        sizer.Add(self.begintext,(0,1))
+        sizer.Add(self.begintime,(1,1),(1,5),wx.EXPAND)
+        sizer.Add(self.endtext,(2,1))
+        sizer.Add(self.endtime,(3,1),(1,5),wx.EXPAND)
+        sizer.Add(self.text,(4,1))
+        sizer.Add(self.TextCtrl,(5,1),(2,5),wx.EXPAND)
+        sizer.Add(self.listBox,(8,1),(4,5),wx.EXPAND)
+        sizer.Add(self.save,(12,1))
+        sizer.Add(self.add,(12,3))
+        sizer.Add(self.delete,(12,5))
         sizer.Add((1,6),(1,7))
         sizer.AddGrowableRow(0)
         sizer.AddGrowableRow(1)
@@ -102,7 +102,7 @@ class Subtitle(wx.Panel):
         sizer.AddGrowableRow(10)
         sizer.AddGrowableRow(11)
         sizer.AddGrowableRow(12)
-        sizer.AddGrowableRow(13)
+       
         sizer.AddGrowableCol(0)
         sizer.AddGrowableCol(1)
         sizer.AddGrowableCol(2)
@@ -111,7 +111,7 @@ class Subtitle(wx.Panel):
         sizer.AddGrowableCol(5)
         sizer.AddGrowableCol(6)
         sizer.AddGrowableCol(7)
-        sizer.SetMinSize((300,500))
+        #sizer.SetMinSize((300,400))
         self.SetSizer(sizer,wx.EXPAND)
 
         
@@ -247,7 +247,7 @@ class Example(wx.Frame):
         self.panel= Subtitle(self, -1)
         # motto.SetFont(wx.Font(9, wx.SWISS, wx.NORMAL, wx.BOLD, False, 'Verdana'))
 
-        self.SetSize((360, 500))
+        self.SetSize((360, 400))
         self.Centre()
         self.Show(True)
 
