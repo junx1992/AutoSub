@@ -150,7 +150,7 @@ class MainFrame(wx.Frame):
 
     def OnOpen(self,evt):        
         self.playerpanel.OnOpen(None)
-        self.bitmap.Hide()
+        #self.bitmap.Hide()
         self.SetTitle("%s - AutoSub" % self.playerpanel.title)
         lan={"English":"en" ,"Chinese":"zh-cn" ,"Japanese":"ja"}
         lang_from = None
@@ -247,13 +247,13 @@ class MainFrame(wx.Frame):
         rr=self.spec.GetRight(self.spec)
         if(rr!="-1"):
                 self.subpanel.SetRight(self.subpanel,rr)
-                
-        if self.ohandle.has_data(1):            
-            (start,self.end,text)=self.ohandle.read(1)[2][0][0]            
-            self.playerpanel.player.video_set_subtitle_file(self.subtitle)
-            str_start=self.OnFormatTime(start)
-            str_end=self.OnFormatTime(self.end)
-            self.subpanel.AddSub(self.subpanel,str_start,str_end,text)
+        if self.ohandle!=None:        
+            if self.ohandle.has_data(1):            
+                (start,self.end,text)=self.ohandle.read(1)[2][0][0]            
+                self.playerpanel.player.video_set_subtitle_file(self.subtitle)
+                str_start=self.OnFormatTime(start)
+                str_end=self.OnFormatTime(self.end)
+                self.subpanel.AddSub(self.subpanel,str_start,str_end,text)
             # Set buffer time
         if self.playerpanel.player.get_length()!=0:
             self.playerpanel.buffergauge.SetValue(self.end*self.playerpanel.buffergauge.GetRange()*1000/self.playerpanel.player.get_length())
