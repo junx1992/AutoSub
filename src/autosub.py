@@ -1,7 +1,6 @@
 """
 Get the Main Frame and link the other
 """
-
 import core.ffmpeg_decoder as fd
 import core.sub_generator as sg
 import core.spectrum as sp
