@@ -132,7 +132,6 @@ class SpecPanel(wx.Panel):
 
         self.panel = wx.Panel(self, -1)
 
-        self.ratio = self.orim.GetWidth()/self.VideoLen*60
 
         self.sld = wx.Slider(self.panel, value = 200, minValue = 150, maxValue =500,
             size=(10, 25), style=wx.SL_VERTICAL | wx.SL_AUTOTICKS|wx.SL_LABELS, name='width')
@@ -238,6 +237,7 @@ class SpecPanel(wx.Panel):
 
     def GetLength(self, event, length):
         self.VideoLen = length
+        self.ratio = self.orim.GetWidth()/self.VideoLen*60
 
     def OpenData(self,event, handle):
         self.handle = handle
