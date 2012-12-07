@@ -235,9 +235,10 @@ class SpecPanel(wx.Panel):
         self.SetSizer(Bigsizer)
         self.SetBackgroundColour(Background)
 
-    def GetLength(self, event, length):
-        self.VideoLen = length
-        self.ratio = self.orim.GetWidth()/self.VideoLen*60
+    def GetLength(self,event,length):
+        self.VideoLen = length        
+        self.ratio = float(self.orim.GetWidth())/self.VideoLen*60       
+        
 
     def OpenData(self,event, handle):
         self.handle = handle

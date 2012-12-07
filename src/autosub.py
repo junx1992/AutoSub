@@ -11,6 +11,7 @@ from core.naive_vad2 import *
 from VLC.playerpart import *
 from VLC.spectrum_widget.SpecWin import *
 from VLC.subtitle_widget.SubtitleEditor import *
+import time
 sys.path.append("/VLC")
 
 class MainFrame(wx.Frame):
@@ -149,9 +150,49 @@ class MainFrame(wx.Frame):
                 self.spec.GetRightLex(self.spec,end_sec)
 
     def OnOpen(self,evt):        
-        self.playerpanel.OnOpen(None)
+        #self.playerpanel.OnOpen(None)
+        self.playerpanel.OnStop(None)
+        # Create a file dialog opened in the current home directory, where
+        # you can display all kind of files, having as title "Choose a file".
+        dlg = wx.FileDialog(self, "Choose a file", user.home, "","*.*", wx.OPEN)
+        if dlg.ShowModal() == wx.ID_OK:
+                dirname = dlg.GetDirectory()
+                filename = dlg.GetFilename()
+                # Creation
+                self.playerpanel.mediapath=unicode(os.path.join(dirname, filename))
+                self.playerpanel.Media = self.playerpanel.Instance.media_new(self.playerpanel.mediapath)
+                #m=self.Instance.media_new(r'D:\shiyan\number3\New folder\1.rmvb')
+                self.playerpanel.player.set_media(self.playerpanel.Media)
+                # Report the title of the file chosen
+                title = self.playerpanel.player.get_title()
+                #  if an error was encountred while retriving the title, then use
+                #  filename
+                if title == -1:
+                        title = filename
+                #self.SetTitle("%s - AutoSub" % title)
 
-        self.spec.GetLength(self.spec,self.playerpanel.player.get_length())
+                # set the window id where to render VLC's video output
+                self.playerpanel.player.set_hwnd(self.playerpanel.videopanel.GetHandle())
+                # set the volume slider to the current volume
+                self.playerpanel.volslider.SetValue(self.playerpanel.player.audio_get_volume() / 2)                        
+                self.playerpanel.title=title             
+
+                # finally destroy the dialog
+                dlg.Destroy()
+                
+                # create the new dialog to choose the recognization and translation
+                self.playerpanel.select_dialog=SelectDialog(None,"Choice")
+                self.playerpanel.select_dialog.ShowModal()
+                # Finally Play~FIXME: this should be made cross-platform
+                self.OnPlay(None)
+                #self.Spec.GetAddr(self.Spec,self.mediapath)                        
+        else:
+                dlg.Destroy()        
+        time.sleep(0.5)
+        leng=self.playerpanel.player.get_length()        
+        self.spec.GetLength(self.spec,length=leng)            
+        self.playerpanel.timer.Start(100)
+        
         #self.bitmap.Hide()
         self.SetTitle("%s - AutoSub" % self.playerpanel.title)
         lan={"English":"en" ,"Chinese":"zh-cn" ,"Japanese":"ja"}
@@ -188,6 +229,21 @@ class MainFrame(wx.Frame):
         self.sub.start()
         self.specd.start()
         self.spec.OpenData(self.spec,handle)
+
+    def OnPlay(self, evt):
+        """Toggle the status to Play/Pause.
+
+        If no file is loaded, open the dialog window.
+        """
+        # check if there is a file to play, otherwise open a
+        # wx.FileDialog to select a file
+        if not self.playerpanel.player.get_media():
+                self.OnOpen(None)
+        else:
+                # Try to launch the media, if this fails display an error message
+                if self.playerpanel.player.play() == -1:
+                        self.playerpanel.errorDialog("Unable to play.")
+                
 
     def SaveSubtitle(self,evt):
         self.subpanel.SaveFile(self.subpanel)
