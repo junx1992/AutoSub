@@ -236,8 +236,9 @@ class SpecPanel(wx.Panel):
         self.SetBackgroundColour(Background)
 
     def GetLength(self,event,length):
-        self.VideoLen = length        
-        self.ratio = float(self.orim.GetWidth())/self.VideoLen*60       
+        self.VideoLen = length
+        self.ratio = float(self.orim.GetWidth())/self.VideoLen*1000
+        print self.ratio
         
 
     def OpenData(self,event, handle):
@@ -280,6 +281,8 @@ class SpecPanel(wx.Panel):
             
         self.orim = wx.ImageFromBuffer(int(np.size(self.spec , axis = 1)), int(np.size(self.spec, axis = 0)), np.uint8(self.spec))
         self.orim = self.orim.Rescale(self.orim.GetWidth(), 140)
+        self.SpecLen = self.orim.GetWidth()
+        self.ratio = float(self.VideoLen)/self.SpecLen/1000
         self.wind.overlay.Reset()
         self.wind.SetBitmap(self.orim.ConvertToBitmap())
         self.Spec_Flag =1
@@ -297,7 +300,7 @@ class SpecPanel(wx.Panel):
         NWID = round(self.bm.GetWidth() * self.pos/200.0)
         NHET = round(self.im.GetHeight())
         self.im = self.orim.Rescale(NWID ,NHET)
-        self.wind.SetBitmap(self.im.ConvertToBitmap())
+        self.wind.SetBitmap(self.im.Conveself.ratiortToBitmap())
         self.wind.SetScrollbars(1,0, self.im.GetWidth(), 200)
         if self.wind.LeftClickFlag == 1:
             self.wind.LeX = self.wind.OLeX*self.pos/200.0
@@ -340,7 +343,8 @@ class SpecPanel(wx.Panel):
     def LeftText(self, event):
         self.textleft.Clear()
         if self.wind.LeftClickFlag ==1:
-            time = self.wind.LeX/self.ratio/self.pos*200
+            time = self.wind.LeX*self.ratio/self.pos*200
+            print self.ratio, self.pos, self.wind.LeX
             lefttext=str(int(time/60/60))+":"+str(int(time/60%60))+":"+str(int(time%60)) + "."+str(int(((round(time, 2) - int(time))*100)))
             self.leftstr=lefttext
             self.textleft.WriteText(str(int(time/60/60))+":"+str(int(time/60%60))+":"+str(int(time%60)) + "."+str(int(((round(time, 2) - int(time))*100))))
@@ -351,7 +355,7 @@ class SpecPanel(wx.Panel):
     def RightText(self, event):
         self.textright.Clear()
         if self.wind.RightClickFlag==1:
-            time = self.wind.RiX/self.ratio/self.pos*200
+            time = self.wind.RiX*self.ratio/self.pos*200
             righttext=str(int(time/60/60))+":"+str(int(time/60%60))+":"+str(int(time%60)) + "."+str(int(((round(time, 2) - int(time))*100)))
             self.rightstr=righttext
             self.textright.WriteText(str(int(time/60/60))+":"+str(int(time/60%60))+":"+str(int(time%60)) + "."+str(int(((round(time, 2) - int(time))*100))))
@@ -370,7 +374,7 @@ class SpecPanel(wx.Panel):
             return "-1"
     def MidText(self, event):
         self.textmid.Clear()
-        time = (-self.wind.CalcScrolledPosition(0,0)[0] + 150)/self.ratio*200.0/self.pos
+        time = (-self.wind.CalcScrolledPosition(0,0)[0] + 150)*self.ratio*200.0/self.pos
         self.textmid.WriteText(str(int(time/60/60))+":"+str(int(time/60%60))+":"+str(int(time%60))+ ":"+str(int(((round(time, 2) - int(time))*100))))
         self.currx = -self.wind.CalcScrolledPosition(0,0)[0]
         self.wind.Refresh()
@@ -378,14 +382,14 @@ class SpecPanel(wx.Panel):
 
     def GetLeftLex(self,event,lefttime):
         self.wind.LeftClickFlag =1    
-        self.wind.LeX=lefttime*self.ratio
+        self.wind.LeX=lefttime/self.ratio
         self.wind.Scroll(self.wind.LeX - 50, 0)
         self.LeftText(event)
         self.wind.Refresh()
 
     def GetRightLex(self,event,righttime):
         self.wind.RightClickFlag =1
-        self.wind.RiX=righttime*self.ratio
+        self.wind.RiX=righttime/self.ratio
         self.RightText(event)
         self.wind.Refresh()
 
@@ -399,7 +403,7 @@ class SpecPanel(wx.Panel):
         self.textcurr.Clear()
         time = milisec
         self.textcurr.WriteText(str(int(time/1000/60/60)) +":" +str(int(time/1000/60%60)) + ":" +str(int(time/1000%60)) +":" +str(int(time%1000)))
-        self.wind.CurrPos = time/1000*self.ratio
+        self.wind.CurrPos = time/1000/self.ratio
         self.wind.Refresh()
         
 
