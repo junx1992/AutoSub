@@ -236,6 +236,9 @@ class SpecPanel(wx.Panel):
         self.SetSizer(Bigsizer)
         self.SetBackgroundColour(Background)
 
+    def GetLength(self, event, length):
+        self.VideoLen = length
+
     def OpenData(self,event, handle):
         self.handle = handle
 
