@@ -150,6 +150,8 @@ class MainFrame(wx.Frame):
 
     def OnOpen(self,evt):        
         self.playerpanel.OnOpen(None)
+
+        self.spec.GetLength(self.spec,self.playerpanel.player.get_length())
         #self.bitmap.Hide()
         self.SetTitle("%s - AutoSub" % self.playerpanel.title)
         lan={"English":"en" ,"Chinese":"zh-cn" ,"Japanese":"ja"}
